@@ -1,6 +1,8 @@
 import express from "express";
 import multer from "multer";
 import { extname } from "path";
+import { v2 as cloudinary } from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 import {
   saveBlogCoverPics,
   saveAuthorsAvatars,
@@ -11,6 +13,15 @@ import {
 } from "../../lib/fs-tools.js";
 
 const filesRouter = express.Router();
+
+const cloudinaryUploader = multer({
+  storage: new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "striveblog/coverpics",
+    },
+  }),
+}).single("cover");
 
 filesRouter.post(
   "/:blogId/single",
