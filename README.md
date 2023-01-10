@@ -1,1 +1,2 @@
-# BE_striveblog_practice
+# BackEnd-M1_D2_HW
+creating restful api practice
