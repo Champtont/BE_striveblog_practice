@@ -1,8 +1,11 @@
 import express from "express";
+import { pipeline } from "stream";
+import { getPDFReadableStream } from "../../lib/pdf-tools.js";
 import multer from "multer";
 import { extname } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { getBlogs } from "../../lib/fs-tools.js";
 import {
   saveBlogCoverPics,
   saveAuthorsAvatars,
@@ -54,5 +57,15 @@ filesRouter.post(
     }
   }
 );
+
+filesRouter.get("/pdf", (req, res, next) => {
+  res.setHeader("Content-Disposition", "attachment; filename=test.pdf");
+
+  const source = getPDFReadableStream(getBlogs());
+  const destination = res;
+  pipeline(source, destination, (err) => {
+    if (err) console.log(err);
+  });
+});
 
 export default filesRouter;
