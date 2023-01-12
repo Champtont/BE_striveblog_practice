@@ -11,14 +11,14 @@ console.log("ROOT OF THE PROJECT:", process.cwd());
 console.log("PUBLIC FOLDER:", publicFolderPath);
 
 console.log("DATA FOLDER PATH: ", dataFolderPath);
-const usersJSONPath = join(dataFolderPath, "users.json");
-const booksJSONPath = join(dataFolderPath, "books.json");
+const authorsJSONPath = join(dataFolderPath, "authors.json");
+const blogsJSONPath = join(dataFolderPath, "blogs.json");
 
-export const getAuthors = () => readJSON(usersJSONPath);
-export const writeAuthors = (usersArray) =>
-  writeJSON(usersJSONPath, usersArray);
-export const getBlogs = () => readJSON(booksJSONPath);
-export const writeBlogs = (booksArray) => writeJSON(booksJSONPath, booksArray);
+export const getAuthors = () => readJSON(authorsJSONPath);
+export const writeAuthors = (authorsArray) =>
+  writeJSON(authorsJSONPath, authorsArray);
+export const getBlogs = () => readJSON(blogsJSONPath);
+export const writeBlogs = (blogsArray) => writeJSON(blogsJSONPath, blogsArray);
 
 export const saveAuthorsAvatars = (fileName, contentAsABuffer) =>
   writeFile(join(publicFolderPath, fileName), contentAsABuffer);

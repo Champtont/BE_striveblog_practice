@@ -35,7 +35,7 @@ filesRouter.post(
 
       await saveBlogCoverPics(fileName, req.file.buffer);
 
-      const url = `http://localhost:3002/img/blogs/${fileName}`;
+      const url = `http://localhost:3004/img/blogs/${fileName}`;
 
       const blogs = await getBlogs();
 
