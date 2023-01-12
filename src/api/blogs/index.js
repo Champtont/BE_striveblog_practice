@@ -114,6 +114,7 @@ blogsRouter.post("/register", async (req, res, next) => {
     const { email } = req.body;
     await sendRegistrationEmail(email);
     res.send();
+    console.log("email sent");
   } catch (error) {
     next(error);
   }
