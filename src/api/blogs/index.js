@@ -5,6 +5,7 @@ import uniqid from "uniqid";
 import fs from "fs";
 import httpErrors from "http-errors";
 import { checkblogSchema, triggerBadRequest } from "./validator.js";
+import { sendRegistrationEmail } from "../../lib/email-tools.js ";
 
 const { NotFound, Unauthorized, BadRequest } = httpErrors;
 
@@ -103,6 +104,16 @@ blogsRouter.delete("/:blogId", (req, res, next) => {
     } else {
       next(NotFound(`Blog with id ${req.params.blogId} not found!`));
     }
+  } catch (error) {
+    next(error);
+  }
+});
+
+blogsRouter.post("/register", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    await sendRegistrationEmail(email);
+    res.send();
   } catch (error) {
     next(error);
   }

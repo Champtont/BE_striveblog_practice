@@ -4,6 +4,7 @@ import { getPDFReadableStream } from "../../lib/pdf-tools.js";
 import multer from "multer";
 import { extname } from "path";
 import { v2 as cloudinary } from "cloudinary";
+import json2csv from "json2csv";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import {
   saveBlogCoverPics,
@@ -11,6 +12,7 @@ import {
   getAuthors,
   writeAuthors,
   getBlogs,
+  getBlogsJsonReadableStrem,
   writeBlogs,
 } from "../../lib/fs-tools.js";
 
@@ -57,15 +59,32 @@ filesRouter.post(
   }
 );
 
-filesRouter.get("/pdf", (req, res, next) => {
+filesRouter.get("/blogsPDF", async (req, res, next) => {
   res.setHeader("Content-Disposition", "attachment; filename=test.pdf");
 
-  const blogs = getBlogs();
+  const blogs = await getBlogs();
   const source = getPDFReadableStream(blogs);
   const destination = res;
   pipeline(source, destination, (err) => {
     if (err) console.log(err);
+    else console.log("stream ended successfully");
   });
+});
+
+filesRouter.get("/blogsCSV", (req, res, next) => {
+  try {
+    res.setHeader("Content-Disposition", "attachment; filename=books.csv");
+    const source = getBlogsJsonReadableStrem();
+    const transform = new json2csv.Transform({
+      fields: ["asin", "title", "category"],
+    });
+    const destination = res;
+    pipeline(source, transform, destination, (err) => {
+      if (err) console.log(err);
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default filesRouter;
